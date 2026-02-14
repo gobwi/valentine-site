@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap"
         rel="stylesheet">
 
     <!-- Styles -->
@@ -18,8 +18,29 @@
 </head>
 
 <body>
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="assets/romantic-music-placeholder.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <!-- Background Decoration -->
     <div class="bg-hearts" id="bg-hearts"></div>
+    <div id="sparkle-container"></div>
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" id="why-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal">&times;</button>
+            <div class="ribbon"
+                style="position:relative; top:0; right:0; margin-bottom:10px; font-size:2rem; transform:none;">✨</div>
+            <h2 style="font-size:1.8rem; margin-bottom:1rem;">Why you?</h2>
+            <p style="font-size:1.2rem; line-height:1.6; font-style:italic; font-family: 'Playfair Display', serif;">
+                "Because every day with you feels like my favorite memory." 💖
+            </p>
+        </div>
+    </div>
 
     <div class="container">
         <div class="card fade-in">
@@ -30,18 +51,27 @@
 
             <div class="gif-container">
                 <!-- User should replace src with their own GIF path -->
-                <!-- USING SVG PLACEHOLDER for demo purposes -->
                 <img src="assets/indexpagegif.gif" alt="Cute Valentine GIF" class="placeholder-img" width="300"
                     height="300">
             </div>
 
             <p>I have a special surprise planned for us...</p>
 
+            <div class="success-message" id="success-msg">
+                <h2>You made the right choice 😌💕</h2>
+            </div>
+
             <div class="btn-group">
                 <button id="btn-yes" class="btn btn-primary">YES! 💖</button>
-                <button id="btn-no" class="btn btn-secondary">No 😢</button>
+                <button id="btn-no" class="btn btn-secondary">No </button>
             </div>
+
+            <a id="why-link" class="link-subtle">Why?</a>
         </div>
+
+        <!-- Secret Easter Egg Button -->
+        <button id="secretLetterBtn" class="easter-egg-btn" onclick="window.location.href='letter.html'"
+            title="A secret note...">💌</button>
     </div>
 
     <!-- Script -->

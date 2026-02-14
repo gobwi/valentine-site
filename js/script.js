@@ -3,14 +3,43 @@
  * Handles button evasion, page transitions, animations, and enhancements
  */
 
+// 🛡️ REFRESH CONTROL SYSTEM
+// 🛡️ REFRESH CONTROL SYSTEM
+function enforceRefreshRedirect() {
+    const navEntries = performance.getEntriesByType("navigation");
+
+    if (navEntries.length > 0 && navEntries[0].type === "reload") {
+        const currentPage = window.location.pathname.split("/").pop();
+
+        if (currentPage !== "index.html") {
+            window.location.href = "index.html";
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const endNightBtn = document.getElementById("endNightBtn");
+
+    if (endNightBtn) {
+        endNightBtn.addEventListener("click", function () {
+            window.location.href = "final.html";
+        });
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize common features
     initFloatingHearts();
     initSparkles();
     initMusicPlayer();
 
+    // Verify current page for refresh protection
+    if (document.getElementById('transport-plan') || document.getElementById('final-message') || document.body.classList.contains('letter-page')) {
+        enforceRefreshRedirect();
+    }
+
     // Page-specific logic
-    if (document.getElementById('btn-no')) {
+    if (document.getElementById('btn-no') || document.getElementById('btn-yes') || document.getElementById('yesBtn')) {
         initProposalPage();
         initConfetti();
         initModal();
@@ -138,7 +167,9 @@ function initConfetti() {
    ========================================= */
 function initProposalPage() {
     const noBtn = document.getElementById('btn-no');
-    const yesBtn = document.getElementById('btn-yes');
+
+    // Bind YES button safely (handle both possible IDs)
+    const yesBtn = document.getElementById('yesBtn') || document.getElementById('btn-yes');
 
     // NO Button Evasion
     if (noBtn) {
@@ -156,7 +187,15 @@ function initProposalPage() {
 
     // YES Button Handling
     if (yesBtn) {
-        yesBtn.addEventListener('click', handleYesClick);
+        yesBtn.onclick = handleYesClick;
+    }
+
+    // Secret Letter Button Handling
+    const letterBtn = document.getElementById("secretLetterBtn");
+    if (letterBtn) {
+        letterBtn.onclick = function () {
+            window.location.href = "letter.html";
+        };
     }
 }
 
@@ -166,13 +205,7 @@ function handleYesClick() {
         window.triggerConfetti();
     }
 
-    // 2. Show Success Message
-    const successMsg = document.getElementById('success-msg');
-    if (successMsg) {
-        successMsg.classList.add('active');
-    }
-
-    // 3. Redirect after 1200ms
+    // 2. Redirect after 1200ms (NO modal)
     setTimeout(function () {
         window.location.href = "theatre.html";
     }, 1200);
@@ -223,6 +256,15 @@ function initTheatrePage() {
         textarea.addEventListener('input', (e) => {
             localStorage.setItem('valentine_transport_plan', e.target.value);
         });
+    }
+
+    // Bind NEXT button safely
+    const nextBtn = document.getElementById("nextBtn") || document.getElementById("btn-next");
+    if (nextBtn) {
+        nextBtn.onclick = function (e) {
+            e.preventDefault(); // Prevent default link behavior if it's an anchor tag
+            window.location.href = "cafe.html";
+        };
     }
 }
 
@@ -379,3 +421,27 @@ function initFloatingHearts() {
         container.appendChild(heart);
     }
 }
+
+/* =========================================
+   🌀 SPIRAL SLIDESHOW ROTATION
+   ========================================= */
+let slideIndex = 0;
+
+function rotateSlides() {
+    const slides = document.querySelectorAll(".spiral-slide");
+
+    if (slides.length === 0) return;
+
+    slides.forEach((slide, i) => {
+        slide.style.opacity = "0";
+        slide.style.transform = "rotate(" + (i * 72) + "deg) translate(200px) rotate(-" + (i * 72) + "deg)";
+    });
+
+    slides[slideIndex].style.opacity = "1";
+    slides[slideIndex].style.transform = "rotate(0deg) translate(0px)";
+
+    slideIndex = (slideIndex + 1) % slides.length;
+}
+
+// Auto-rotate slides every 3 seconds
+setInterval(rotateSlides, 3000);
